@@ -1,5 +1,6 @@
 package pl.wsb.fitnesstracker.training.api;
 
+import pl.wsb.fitnesstracker.training.internal.ActivityType;
 import pl.wsb.fitnesstracker.user.api.User;
 
 import javax.xml.crypto.Data;
@@ -21,5 +22,6 @@ public interface TrainingProvider {
     List<Training> getAllTrainings();
     List<Training> getUserTrainings(Long userId);
     List<Training> listTrainingByDate(Date date);
+    List<Training> listTrainingByActivity(ActivityType activityType);
 
 }

@@ -1,13 +1,15 @@
 package pl.wsb.fitnesstracker.training.internal;
 
+import org.springframework.stereotype.Component;
 import pl.wsb.fitnesstracker.training.api.Training;
-import pl.wsb.fitnesstracker.training.api.TrainingDTO;
+import pl.wsb.fitnesstracker.training.api.TrainingDto;
 
-
+@Component
 public class TrainingMapper {
 
-    TrainingDTO toDto(Training training) {
-        return new TrainingDTO(
+    TrainingDto toDto(Training training) {
+        return new TrainingDto(
+                training.getId(),
                 training.getUser(),
                 training.getStartTime(),
                 training.getEndTime(),
@@ -17,14 +19,14 @@ public class TrainingMapper {
         );
     }
 
-    Training toEntity(TrainingDTO trainingDTO) {
+    Training toEntity(TrainingDto trainingDTO) {
         return new Training(
-                trainingDTO.getUser(),
-                trainingDTO.getStartTime(),
-                trainingDTO.getEndTime(),
-                trainingDTO.getActivityType(),
-                trainingDTO.getDistance(),
-                trainingDTO.getAverageSpeed()
+                trainingDTO.user(),
+                trainingDTO.startTime(),
+                trainingDTO.endTime(),
+                trainingDTO.activityType(),
+                trainingDTO.distance(),
+                trainingDTO.averageSpeed()
         );
     }
 }
