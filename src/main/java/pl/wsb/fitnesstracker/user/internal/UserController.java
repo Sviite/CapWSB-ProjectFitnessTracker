@@ -1,9 +1,11 @@
 package pl.wsb.fitnesstracker.user.internal;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.wsb.fitnesstracker.user.api.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -14,11 +16,19 @@ class UserController {
     private final UserServiceImpl userService;
     private final UserMapper userMapper;
 
-    @GetMapping
-    public List<UserShortDto> getAllUsers() {
+    @GetMapping("/simple")
+    public List<UserShortDto> getAllUsersShort() {
         return userService.findAllUsers()
                 .stream()
                 .map(user -> new UserShortDto(user.getId(), user.getFirstName(), user.getLastName()))
+                .toList();
+    }
+
+    @GetMapping
+    public List<UserDto> getAllUsers() {
+        return userService.findAllUsers()
+                .stream()
+                .map(userMapper::toDto)
                 .toList();
     }
 
@@ -30,6 +40,7 @@ class UserController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDto addUser(@RequestBody UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         User savedUser = userService.createUser(user);
@@ -37,11 +48,12 @@ class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/email")
     public List<UserEmailDto> searchByEmail(@RequestParam String email) {
         return userService.findByEmailContainingIgnoreCase(email)
                 .stream()
@@ -49,11 +61,11 @@ class UserController {
                 .toList();
     }
 
-    @GetMapping("/older-than")
-    public List<UserShortDto> getUsersOlderThan(@RequestParam int years) {
-        return userService.findUsersOlderThan(years)
+    @GetMapping("/older/{time}")
+    public List<UserDto> getUsersOlderThan(@PathVariable("time") LocalDate time) {
+        return userService.findUsersOlderThan(time)
                 .stream()
-                .map(user -> new UserShortDto(user.getId(), user.getFirstName(), user.getLastName()))
+                .map(userMapper::toDto)
                 .toList();
     }
 

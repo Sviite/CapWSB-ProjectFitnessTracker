@@ -171,7 +171,6 @@ class TrainingApiIntegrationTest extends IntegrationTestBase {
     void shouldPersistTraining_whenCreatingNewTraining() throws Exception {
 
         User user1 = existingUser(generateClient());
-
         String requestBody = """
                 {
                     "userId": "%s",
@@ -182,6 +181,7 @@ class TrainingApiIntegrationTest extends IntegrationTestBase {
                     "averageSpeed": 8.2
                 }
                 """.formatted(user1.getId());
+
         mockMvc.perform(post("/v1/trainings").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andDo(log())
                 .andExpect(status().isCreated())

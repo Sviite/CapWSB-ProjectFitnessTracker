@@ -52,10 +52,9 @@ class UserServiceImpl implements UserService, UserProvider {
                 .toList();
     }
 
-    public List<User> findUsersOlderThan(int years) {
-        LocalDate cutoffDate = LocalDate.now().minusYears(years);
+    public List<User> findUsersOlderThan(LocalDate years) {
         return userRepository.findAll().stream()
-                .filter(user -> user.getBirthdate().isBefore(cutoffDate))
+                .filter(user -> user.getBirthdate().isBefore(years))
                 .toList();
     }
 
